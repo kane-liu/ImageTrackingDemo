@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     @IBOutlet var sceneView: ARSCNView!
     
     // MARK: Video Player
-    let videoPlayer1: AVPlayer? = {
+    let videoPlayer: AVPlayer? = {
         guard let videoURL = Bundle.main.url(forResource: "video1", withExtension: "mp4", subdirectory: "art.scnassets") else {
             print("Video1 not exsiting")
             return nil
@@ -24,14 +24,10 @@ class ViewController: UIViewController {
         return AVPlayer(url: videoURL)
     }()
     
-    let videoPlayer2: AVPlayer? = {
-        guard let videoURL = Bundle.main.url(forResource: "video2", withExtension: "mp4", subdirectory: "art.scnassets") else {
-            print("Video2 not exsiting")
-            return nil
-        }
-        
-        return AVPlayer(url: videoURL)
-    }()
+    @objc public func repeatVideo() {
+        videoPlayer?.seek(to: .zero)
+        videoPlayer?.play()
+    }
     
     // MARK: Lifecycle
     override func viewDidLoad() {
@@ -44,12 +40,25 @@ class ViewController: UIViewController {
         super.viewWillAppear(animated)
         
         startImageTracking()
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(repeatVideo),
+            name: .AVPlayerItemDidPlayToEndTime,
+            object: nil
+        )
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         stopImageTracking()
+        
+        NotificationCenter.default.removeObserver(
+            self,
+            name: .AVPlayerItemDidPlayToEndTime,
+            object: nil
+        )
     }
     
     // MARK: SceneView
@@ -86,11 +95,8 @@ extension ViewController: ARSCNViewDelegate {
             let plane = SCNPlane(width: anchor.referenceImage.physicalSize.width, height: anchor.referenceImage.physicalSize.height)
             
             if anchor.referenceImage.name == "trackingImage1" {
-                plane.firstMaterial?.diffuse.contents = videoPlayer1
-                videoPlayer1?.play()
-            } else {
-                plane.firstMaterial?.diffuse.contents = videoPlayer2
-                videoPlayer2?.play()
+                plane.firstMaterial?.diffuse.contents = videoPlayer
+                videoPlayer?.play()
             }
             
             let planeNode = SCNNode(geometry: plane)
