@@ -4,6 +4,8 @@
     "author" : "xcode"
   },
   "resources" : [
-
+    {
+      "filename" : "trackingImage1.arreferenceimage"
+    }
   ]
 }
