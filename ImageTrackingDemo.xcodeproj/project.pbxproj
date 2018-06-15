@@ -14,6 +14,7 @@
 		957B72FE20D3830700E546F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 957B72FD20D3830700E546F3 /* Assets.xcassets */; };
 		957B730120D3830700E546F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 957B72FF20D3830700E546F3 /* LaunchScreen.storyboard */; };
 		95EC865C20D393B700D6E1D7 /* ARKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 95EC865B20D393B700D6E1D7 /* ARKit.framework */; };
+		95EC865E20D3A58F00D6E1D7 /* demo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 95EC865D20D3A58F00D6E1D7 /* demo.gif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		957B730020D3830700E546F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		957B730220D3830700E546F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		95EC865B20D393B700D6E1D7 /* ARKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ARKit.framework; path = System/Library/Frameworks/ARKit.framework; sourceTree = SDKROOT; };
+		95EC865D20D3A58F00D6E1D7 /* demo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = demo.gif; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				957B72FD20D3830700E546F3 /* Assets.xcassets */,
 				957B72FF20D3830700E546F3 /* LaunchScreen.storyboard */,
 				957B730220D3830700E546F3 /* Info.plist */,
+				95EC865D20D3A58F00D6E1D7 /* demo.gif */,
 			);
 			path = ImageTrackingDemo;
 			sourceTree = "<group>";
@@ -139,6 +142,7 @@
 			files = (
 				957B72F720D3830600E546F3 /* art.scnassets in Resources */,
 				957B730120D3830700E546F3 /* LaunchScreen.storyboard in Resources */,
+				95EC865E20D3A58F00D6E1D7 /* demo.gif in Resources */,
 				957B72FE20D3830700E546F3 /* Assets.xcassets in Resources */,
 				957B72FC20D3830600E546F3 /* Main.storyboard in Resources */,
 			);
