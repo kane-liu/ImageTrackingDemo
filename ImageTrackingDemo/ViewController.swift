@@ -10,66 +10,116 @@ import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: UIViewController, ARSCNViewDelegate {
+class ViewController: UIViewController {
 
     @IBOutlet var sceneView: ARSCNView!
     
+    // MARK: Video Player
+    let videoPlayer1: AVPlayer? = {
+        guard let videoURL = Bundle.main.url(forResource: "video1", withExtension: "mp4", subdirectory: "art.scnassets") else {
+            print("Video1 not exsiting")
+            return nil
+        }
+        
+        return AVPlayer(url: videoURL)
+    }()
+    
+    let videoPlayer2: AVPlayer? = {
+        guard let videoURL = Bundle.main.url(forResource: "video2", withExtension: "mp4", subdirectory: "art.scnassets") else {
+            print("Video2 not exsiting")
+            return nil
+        }
+        
+        return AVPlayer(url: videoURL)
+    }()
+    
+    // MARK: Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set the view's delegate
-        sceneView.delegate = self
-        
-        // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
-        
-        // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
-        
-        // Set the scene to the view
-        sceneView.scene = scene
+        setupSceneView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-
-        // Run the view's session
-        sceneView.session.run(configuration)
+        startImageTracking()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        // Pause the view's session
+        stopImageTracking()
+    }
+    
+    // MARK: SceneView
+    private func setupSceneView() {
+        sceneView.delegate = self
+        sceneView.session.delegate = self
+        sceneView.showsStatistics = true
+    }
+    
+    // MARK: Image Tracking by ARKit2.0
+    private func startImageTracking() {
+        guard let trackingImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) else {
+            fatalError("No Tracking images")
+        }
+        
+        let configration = ARImageTrackingConfiguration()
+        configration.trackingImages = trackingImages
+        configration.maximumNumberOfTrackedImages = 2
+        
+        sceneView.session.run(configration, options: [.resetTracking, .removeExistingAnchors])
+    }
+    
+    private func stopImageTracking() {
         sceneView.session.pause()
     }
+}
 
-    // MARK: - ARSCNViewDelegate
+extension ViewController: ARSCNViewDelegate {
     
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
-     
+        
+        if let anchor = anchor as? ARImageAnchor {
+            let plane = SCNPlane(width: anchor.referenceImage.physicalSize.width, height: anchor.referenceImage.physicalSize.height)
+            
+            if anchor.referenceImage.name == "trackingImage1" {
+                plane.firstMaterial?.diffuse.contents = videoPlayer1
+                videoPlayer1?.play()
+            } else {
+                plane.firstMaterial?.diffuse.contents = videoPlayer2
+                videoPlayer2?.play()
+            }
+            
+            let planeNode = SCNNode(geometry: plane)
+            // Rotation plane
+            planeNode.eulerAngles.x = -.pi / 2
+            
+            node.addChildNode(planeNode)
+        }
+        
         return node
     }
-*/
-    
+}
+
+extension ViewController: ARSessionDelegate {
+ 
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
-        
+        print(error.localizedDescription)
     }
     
     func sessionWasInterrupted(_ session: ARSession) {
         // Inform the user that the session has been interrupted, for example, by presenting an overlay
-        
+        print("Session was interrupted")
     }
     
     func sessionInterruptionEnded(_ session: ARSession) {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
+        print("Session interruption ended")
         
+        startImageTracking()
     }
 }
