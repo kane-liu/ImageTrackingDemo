@@ -100,7 +100,11 @@ extension ViewController: ARSCNViewDelegate {
             }
             
             let planeNode = SCNNode(geometry: plane)
-            // Rotation plane
+            /*
+             `SCNPlane` is vertically oriented in its local coordinate space, but
+             `ARImageAnchor` assumes the image is horizontal in its local space, so
+             rotate the plane to match.
+             */
             planeNode.eulerAngles.x = -.pi / 2
             
             node.addChildNode(planeNode)
