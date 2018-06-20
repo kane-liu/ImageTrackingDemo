@@ -74,8 +74,8 @@ class ViewController: UIViewController {
             fatalError("No Tracking images")
         }
         
-        let configration = ARImageTrackingConfiguration()
-        configration.trackingImages = trackingImages
+        let configration = ARWorldTrackingConfiguration()
+        configration.detectionImages = trackingImages
         configration.maximumNumberOfTrackedImages = 2
         
         sceneView.session.run(configration, options: [.resetTracking, .removeExistingAnchors])
